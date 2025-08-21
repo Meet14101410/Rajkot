@@ -1,0 +1,69 @@
+# Represents a general landmark or point of interest
+class Landmark
+  attr_reader :name, :type, :description
+
+  def initialize(name, type, description)
+    @name = name
+    @type = type
+    @description = description
+  end
+
+  def to_s
+    "Name: #{name}, Type: #{type}, Description: #{description}"
+  end
+end
+
+# Represents key facts about the city
+class CityFact
+  attr_reader :fact_name, :value
+
+  def initialize(fact_name, value)
+    @fact_name = fact_name
+    @value = value
+  end
+
+  def to_s
+    "#{fact_name}: #{value}"
+  end
+end
+
+# Represents the city of Rajkot itself
+class Rajkot
+  def initialize
+    @facts = {}
+    @landmarks = []
+    
+    add_fact("Location", "Gujarat, India")
+    add_fact("Population", "Approx. 1.8 million (2023)")
+    
+    add_landmark("Watson Museum", "Museum", "A museum containing human history and culture exhibits.")
+    add_landmark("Kaba Gandhi No Delo", "Historical Place", "The childhood home of Mahatma Gandhi.")
+    add_landmark("Lal Pari Lake", "Lake", "A popular spot for bird watching and picnics.")
+  end
+
+  def add_fact(name, value)
+    @facts[name] = CityFact.new(name, value)
+  end
+
+  def add_landmark(name, type, description)
+    @landmarks << Landmark.new(name, type, description)
+  end
+
+  def get_fact(name)
+    @facts[name]
+  end
+
+  def search_landmarks_by_type(type)
+    @landmarks.select { |l| l.type == type }
+  end
+end
+
+# Main script logic
+rajkot = Rajkot.new
+
+puts rajkot.get_fact("Population")
+puts "\nSearching for museums:"
+rajkot.search_landmarks_by_type("Museum").each { |l| puts l }
+
+puts "\nSearching for historical places:"
+rajkot.search_landmarks_by_type("Historical Place").each { |l| puts l }
