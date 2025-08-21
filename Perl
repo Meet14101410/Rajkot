@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Data::Dumper;
+
+my $data_file = 'rajkot_data.txt';
+open my $fh, '<', $data_file or die "Cannot open '$data_file': $!";
+
+my %rajkot_data;
+
+# Read and parse the data file
+while (my $line = <$fh>) {
+    chomp $line;
+    next if $line =~ /^#/;
+    my ($type, $name, $description) = split /\|/, $line;
+    push @{$rajkot_data{$type}}, {
+        name => $name,
+        description => $description
+    };
+}
+close $fh;
+
+# Function to generate a report on a specific category
+sub generate_report_by_type {
+    my $type = shift;
+    print "--- Report on $type in Rajkot ---\n";
+    if (exists $rajkot_data{$type}) {
+        foreach my $item (@{$rajkot_data{$type}}) {
+            print "  - Name: $item->{name}\n";
+            print "    Description: $item->{description}\n";
+        }
+    } else {
+        print "No data found for type '$type'.\n";
+    }
+    print "\n";
+}
+
+# Main script logic
+generate_report_by_type("Historical Place");
+generate_report_by_type("Museum");
+generate_report_by_type("Lake");
+
+__END__
+# Data for rajkot_data.txt
+# Type|Name|Description
+Historical Place|Kaba Gandhi No Delo|The childhood home of Mahatma Gandhi.
+Museum|Watson Museum|A museum containing human history and culture exhibits.
+Lake|Lal Pari Lake|A popular spot for bird watching and picnics.
+Historical Place|Rashtriya Shala|Founded by Mahatma Gandhi.
