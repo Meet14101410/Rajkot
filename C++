@@ -1,0 +1,69 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+// Structure to hold information about a point of interest
+struct PointOfInterest {
+    std::string name;
+    std::string type;
+    std::string description;
+};
+
+// Class to manage information about Rajkot
+class RajkotInfoSystem {
+private:
+    std::unordered_map<std::string, std::string> city_facts;
+    std::vector<PointOfInterest> points_of_interest;
+
+public:
+    RajkotInfoSystem() {
+        // Initialize with key facts about Rajkot
+        city_facts["Location"] = "Gujarat, India";
+        city_facts["Population"] = "Approx. 1.8 million (2023)";
+        city_facts["Known For"] = "Ghee, Engineering, Jewelry";
+
+        // Add some points of interest
+        points_of_interest.push_back({"Watson Museum", "Museum", "A museum containing human history and culture exhibits."});
+        points_of_interest.push_back({"Kaba Gandhi No Delo", "Historical Place", "The childhood home of Mahatma Gandhi."});
+        points_of_interest.push_back({"Lal Pari Lake", "Lake", "A popular spot for bird watching and picnics."});
+    }
+
+    void get_city_fact(const std::string& fact_name) const {
+        if (city_facts.count(fact_name)) {
+            std::cout << fact_name << ": " << city_facts.at(fact_name) << std::endl;
+        } else {
+            std::cout << "Fact not found: " << fact_name << std::endl;
+        }
+    }
+    
+    void search_points_of_interest(const std::string& search_term) const {
+        std::cout << "\n--- Search Results for '" << search_term << "' ---" << std::endl;
+        bool found = false;
+        for (const auto& poi : points_of_interest) {
+            if (poi.name.find(search_term) != std::string::npos || 
+                poi.type.find(search_term) != std::string::npos) {
+                std::cout << "Name: " << poi.name << std::endl;
+                std::cout << "Type: " << poi.type << std::endl;
+                std::cout << "Description: " << poi.description << std::endl;
+                std::cout << "----------------------------------------" << std::endl;
+                found = true;
+            }
+        }
+        if (!found) {
+            std::cout << "No matching points of interest found." << std::endl;
+        }
+    }
+};
+
+int main() {
+    RajkotInfoSystem info_system;
+
+    info_system.get_city_fact("Population");
+    info_system.get_city_fact("Known For");
+
+    info_system.search_points_of_interest("Museum");
+    info_system.search_points_of_interest("Gandhi");
+    
+    return 0;
+}
